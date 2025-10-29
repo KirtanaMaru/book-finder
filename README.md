@@ -1,7 +1,6 @@
 # 📚 Book Finder App
 
 A simple and responsive web application built using **React** that allows users to search for books by title using the **Open Library API**.  
-This project was developed as part of the **Take-Home UI Challenge**.
 
 ---
 
@@ -41,24 +40,6 @@ The app allows users to:
 
 ---
 
-## 🧩 Folder Structure
-
-book-finder/
-├── public/
-│ ├── library.jpg
-│ └── index.html
-├── src/
-│ ├── components/
-│ ├── App.js
-│ ├── App.css
-│ └── index.js
-├── package.json
-└── README.md
-
-yaml
-Copy code
-
----
 
 ## 🧪 How to Run Locally
 
