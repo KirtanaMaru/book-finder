@@ -1,38 +1,448 @@
-.App {
+
+:root {
+  --bg-color: #f9f9fb;
+  --text-color: #2d2d2d;
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --accent-color: #9b5de5;
+  --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("./assets/library.jpg") center/cover no-repeat;
+  z-index: -1;
+  filter: brightness(0.65) blur(4px); 
+  transition: filter 0.4s ease;
+}
+
+.background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.7)
+  );
+  z-index: -1;
+}
+
+/* 🔸 App Content on Top */
+.app {
+  position: relative;
+  z-index: 1;
+  padding: 30px 15px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+body.dark .background {
+  filter: brightness(0.45) blur(5px);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.book-icon {
+  margin-top: 20px;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  animation: float 3s ease-in-out infinite; 
+}
+
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.header h1 {
+  font-size: 3rem;
+  background: white;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 5px;
+}
+
+.header p {
+  color: #ffffff;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+.search-bar {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  width: 40%;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: var(--accent-color);
+  opacity: 0.8;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding: 12px 100px 12px 45px; /* space for icon & button */
+  border-radius: 40px;
+  border: 2px solid var(--accent-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.search-wrapper input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 10px rgba(156, 39, 176, 0.4);
+}
+
+/* Button inside input (right side) */
+.search-btn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: linear-gradient(to right, var(--accent-color), #3f51b5);
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: 0.3s ease;
+  box-shadow: 0 3px 10px rgba(63, 81, 181, 0.3);
+}
+
+.search-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 6px 15px rgba(156, 39, 176, 0.4);
+}
+
+/* Placeholder styling */
+.search-wrapper input::placeholder {
+  color: rgba(61, 60, 60, 0.6);
+}
+
+body.dark .search-btn {
+  background: linear-gradient(to right, #64b5f6, #1976d2);
+}
+
+.scroll-container {
+  max-height: 65vh; 
+  overflow-y: auto;
+  width: 90%;
+  padding-right: 10px;
+  scrollbar-width: thin; 
+  scrollbar-color: var(--accent-color) rgba(255, 255, 255, 0.1);
+}
+
+
+.scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #3f51b5;
+}
+
+.results-heading{
+  color:#fff;
+}
+/* Grid */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+  padding: 0 20px;
+}
+
+.book-card {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(63, 81, 181, 0.3);
+}
+
+.book-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.book-card h3 {
+  font-size: 16px;
+  margin: 10px 0 5px;
+  color: #3f51b5;
+}
+
+.book-card p {
+  font-size: 14px;
+  color: #000000;
+}
+
+.loading {
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 12px; 
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff; 
+  text-align: center;
+  margin-top: 40px;
+  animation: pulse 1.5s infinite ease-in-out;
+  letter-spacing: 1px;
 }
 
-.App-link {
-  color: #61dafb;
+.loading::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-@keyframes App-logo-spin {
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Gentle text pulsing */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.error {
+  display: inline-block;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff6b6b, #c0392b);
+  padding: 12px 25px;
+  border-radius: 25px;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+  margin-top: 40px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode tweak for error */
+body.dark .error {
+  background: linear-gradient(135deg, #ef5350, #b71c1c);
+  box-shadow: 0 4px 15px rgba(239, 83, 80, 0.4);
+}
+
+/* 📱 Small devices (phones) */
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 2.2rem;
+  }
+
+  .book-icon {
+    width: 70px;
+    height: 70px;
+    margin-top: 10px;
+  }
+
+  .header p {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  .search-bar {
+    width: 90%;
+    margin-bottom: 25px;
+  }
+
+  .search-wrapper input {
+    padding: 10px 85px 10px 40px;
+    font-size: 14px;
+  }
+
+  .search-btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .results-heading {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  .scroll-container {
+    max-height: 60vh;
+    width: 95%;
+  }
+
+  .book-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+  }
+
+  .book-card {
+    padding: 10px;
+  }
+
+  .book-card img {
+    height: 180px;
+  }
+
+  .book-card h3 {
+    font-size: 14px;
+  }
+
+  .book-card p {
+    font-size: 12px;
+  }
+
+  .error {
+    font-size: 16px;
+    padding: 10px 18px;
+  }
+}
+
+/* 💻 Medium devices (tablets, small laptops) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .header h1 {
+    font-size: 2.6rem;
+  }
+
+  .book-icon {
+    width: 85px;
+    height: 85px;
+  }
+
+  .header p {
+    font-size: 1rem;
+  }
+
+  .search-bar {
+    width: 70%;
+  }
+
+  .results-heading {
+    font-size: 1.4rem;
+  }
+
+  .scroll-container {
+    max-height: 65vh;
+    width: 90%;
+  }
+
+  .book-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 18px;
+  }
+}
+
+/* 🖥️ Large screens (desktops) */
+@media (min-width: 1025px) {
+  .app {
+    padding: 40px 20px;
+  }
+
+  .search-bar {
+    width: 40%;
+  }
+
+  .book-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .header h1 {
+    font-size: 3rem;
+  }
+
+  .book-icon {
+    width: 100px;
+    height: 100px;
   }
 }
