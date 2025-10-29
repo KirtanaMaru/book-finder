@@ -3,6 +3,7 @@ import './App.css';
 import Header from "./Component/Header";
 import SearchBar from "./Component/SearchBar";
 import BookGrid from "./Component/BookGrid";
+import libraryImage from "./assets/library.jpg";
 
 function App() {
   const [query, setQuery] = useState("");
@@ -31,7 +32,13 @@ function App() {
 
   return (
   <>
-  <div className="background"></div>
+  <div className="background" style={{
+          backgroundImage: `url(${libraryImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          height: "100vh",
+        }}></div>
   <div className="app">
       <Header/>
       <SearchBar query={query} setQuery={setQuery} onSearch={fetchBooks} />
